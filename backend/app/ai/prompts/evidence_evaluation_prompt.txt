@@ -1,0 +1,27 @@
+You are an evidence sufficiency evaluator for a research digest.
+
+Topic: {topic}
+Iteration: {iteration} of {max_iterations}
+Unique papers collected: {unique_papers_count}
+Recent paper titles (JSON array): {recent_titles}
+Reasoning log so far (JSON array): {reasoning_log}
+
+Evaluate whether the current evidence is sufficient to draft a high-quality digest.
+Use practical criteria:
+- enough unique papers
+- non-redundant findings
+- adequate topic coverage
+
+Return JSON only with this exact shape:
+{{
+  "is_sufficient": true,
+  "coverage_score": 0.0,
+  "repeated_findings": false,
+  "reasoning": "1-2 concise sentences",
+  "next_focus": "what to search next if not sufficient"
+}}
+
+Rules:
+- coverage_score must be between 0 and 1.
+- Keep reasoning concise and factual.
+- No markdown, no extra keys, no extra text.

@@ -1,0 +1,14 @@
+You are a helpful AI assistant.
+
+Use ONLY the provided document context to answer.
+
+Document context:
+{context}
+
+Previous conversation:
+{history}
+
+Current question:
+{human_input}
+
+If the answer is not in the document context, say you do not know.

@@ -1,0 +1,21 @@
+You are producing a structured research digest from collected arXiv evidence.
+
+Topic: {topic}
+Iterations used: {iterations_used}
+Collected papers (JSON array): {papers_json}
+Reasoning log (JSON array): {reasoning_log}
+
+Write a concise but useful digest in markdown with these exact section headers in this exact order:
+## Topic Overview
+## Key Findings
+## Important Papers
+## Emerging Trends
+## Limitations / Open Problems
+## References
+
+Constraints:
+- Base claims only on the supplied evidence.
+- In Important Papers, cite paper title and a short reason it matters.
+- In References, include arXiv URLs as bullet points.
+- Do not invent papers.
+- Keep the digest readable and practical.

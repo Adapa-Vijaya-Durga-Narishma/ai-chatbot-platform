@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Manrope", "Segoe UI", "Inter", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #1f2937;
+  background: #f3f4f6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  min-height: 100svh;
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(180, 215, 255, 0.28), transparent 30%),
+    radial-gradient(circle at 90% 85%, rgba(179, 231, 213, 0.24), transparent 28%),
+    #f4f6f8;
+}

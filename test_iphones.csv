@@ -1,0 +1,16 @@
+product_id,product_name,price,storage,color,quantity_in_stock,rating
+1,iPhone 15 Pro Max,1199,256GB,Space Black,45,4.8
+2,iPhone 15 Pro Max,1299,512GB,Space Black,32,4.8
+3,iPhone 15 Pro Max,1399,1TB,Space Black,18,4.8
+4,iPhone 15 Pro,999,256GB,Black Titanium,67,4.7
+5,iPhone 15 Pro,1099,512GB,Black Titanium,41,4.7
+6,iPhone 15 Pro,1199,1TB,Black Titanium,25,4.7
+7,iPhone 15,799,128GB,Black,89,4.5
+8,iPhone 15,899,256GB,Black,56,4.5
+9,iPhone 15,999,512GB,Black,34,4.5
+10,iPhone 14 Pro Max,1099,256GB,Gold,12,4.6
+11,iPhone 14 Pro,899,256GB,Silver,28,4.5
+12,iPhone 14,699,128GB,Blue,45,4.3
+13,iPhone 14,799,256GB,Blue,38,4.3
+14,iPhone SE,429,128GB,Black,92,4.2
+15,iPhone SE,529,256GB,Black,67,4.2

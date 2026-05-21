@@ -1,0 +1,54 @@
+# ── Web framework ─────────────────────────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.12      # file upload / form parsing
+
+# ── Config & validation ───────────────────────────────────────────────────────
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+email-validator>=2.2.0
+python-dotenv>=1.0.0
+
+# ── Database ──────────────────────────────────────────────────────────────────
+sqlalchemy[asyncio]>=2.0.0
+alembic>=1.13.0
+asyncpg>=0.29.0               # async PostgreSQL driver (FastAPI path)
+psycopg2-binary>=2.9.9        # sync driver required by LangChain SQLDatabase
+
+# ── AI — LangChain / LiteLLM ─────────────────────────────────────────────────
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langchain-community>=0.3.0
+langchain-experimental>=0.3.0
+langgraph>=0.2.0
+openai>=1.40.0                # OpenAI SDK — used via LiteLLM proxy
+
+# ── Vector store ──────────────────────────────────────────────────────────────
+chromadb>=0.5.0
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+passlib[bcrypt]>=1.7.4
+python-jose[cryptography]>=3.3.0
+httpx>=0.27.0                 # Google OAuth token exchange
+
+# ── File handling ─────────────────────────────────────────────────────────────
+aiofiles>=23.2.0
+pypdf>=4.0.0                  # PDF parsing
+openpyxl>=3.1.0               # Excel parsing
+opencv-python>=4.8.0          # Video frame extraction
+
+# ── Google Sheets ─────────────────────────────────────────────────────────────
+gspread>=6.0.0
+google-auth>=2.29.0
+google-auth-oauthlib>=1.2.0
+google-api-python-client>=2.130.0
+pandas>=2.2.0
+tabulate>=0.9.0
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest>=8.2.0
+pytest-asyncio>=0.23.0
+httpx>=0.27.0                 # AsyncClient for integration tests
+
+# ── Code quality ──────────────────────────────────────────────────────────────
+ruff>=0.4.0

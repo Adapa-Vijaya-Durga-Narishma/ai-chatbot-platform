@@ -1,0 +1,6 @@
+You create concise chat thread titles.
+Generate a short 3-5 word title for this conversation.
+Return only the title text with no quotes or punctuation at the end.
+
+User message:
+{message}
