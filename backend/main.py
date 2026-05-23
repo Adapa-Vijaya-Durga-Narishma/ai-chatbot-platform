@@ -32,7 +32,7 @@ async def health_check() -> dict[str, str]:
 
 
 # Routers
-from app.api import auth, chat, dataframe_chat, research, sql_chat, tic_tac_toe
+from app.api import auth, chat, dataframe_chat, n8n, research, sql_chat, tic_tac_toe
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
@@ -40,6 +40,7 @@ app.include_router(dataframe_chat.router, prefix="/api/dataframe-chat", tags=["d
 app.include_router(sql_chat.router, prefix="/api/sql-chat", tags=["sql-chat"])
 app.include_router(research.router, prefix="/api/research", tags=["research"])
 app.include_router(tic_tac_toe.router, prefix="/api/tic-tac-toe", tags=["tic-tac-toe"])
+app.include_router(n8n.router, prefix="/api/n8n", tags=["n8n-sidecar"])
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

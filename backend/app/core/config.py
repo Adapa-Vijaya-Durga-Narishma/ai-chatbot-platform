@@ -49,6 +49,11 @@ class Settings(BaseSettings):
     GOOGLE_SERVICE_ACCOUNT_JSON: Optional[str] = None
     GOOGLE_SERVICE_ACCOUNT_JSON_FILE: Optional[str] = None
 
+    # ------------------------------------------------------------------ n8n automation sidecar
+    N8N_WEBHOOK_URL: Optional[str] = None
+    N8N_API_KEY: Optional[str] = None
+    N8N_STATUS_WEBHOOK_URL: Optional[str] = None
+
     # ------------------------------------------------------------------ File uploads
     MAX_UPLOAD_MB: int = 20
     DATAFRAME_MAX_UPLOAD_MB: int = 10

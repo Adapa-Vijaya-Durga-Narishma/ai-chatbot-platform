@@ -1,0 +1,420 @@
+{
+  "name": "AI Research Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 15,
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3fb796a8-84da-449b-9729-90dd68c44249",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, topic FROM research_config WHERE active = true;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        208,
+        0
+      ],
+      "id": "38e31f31-d085-46e9-a8e9-4c5161b94c1f",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "3IKbldieRuFBm7Th",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6eb37f62-556d-4f73-ba57-9ab4757483af",
+              "leftValue": "={{ $json.topic }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "f4814250-e8ab-48dd-b007-919bae6f7e86",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "b50c220a-259e-41c4-824e-d98bcefbf2b2",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://bulb-fading-riches.ngrok-free.dev/api/n8n/research-digest",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-N8N-API-Key",
+              "value": "OwWYU9Fj53lCTrKyTSUsrq2B5zbbQVKiIbS25z4HSl0"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "topic",
+              "value": "={{ $json.topic }}"
+            },
+            {
+              "name": "user_email",
+              "value": "n8n-automation@amzur.com"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "2aeb9fdd-40ec-45a2-b6ee-7f11a40519fe",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ad97d936-eebd-457b-a369-647343dcbd75",
+              "leftValue": "={{ $json.topic }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1040,
+        -96
+      ],
+      "id": "636a44b4-759b-4994-a735-b4bbcda24e48",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "sendTo": "vijayadurga.adapa@amzur.com",
+        "subject": "=Daily Research Digest: {{ $json.topic }}",
+        "message": "={{ $json.html_body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1456,
+        -96
+      ],
+      "id": "0dc1af81-ce8d-455e-825d-a78046bc1876",
+      "name": "Send a message",
+      "webhookId": "208c6da1-7e63-4549-b906-9242fddb1827",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qCOubMDGoxNATWJs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE research_digests SET email_sent = true WHERE id = '{{ $('HTTP Request').item.json.digest_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1664,
+        -96
+      ],
+      "id": "c0d18dfc-d649-4e80-af37-5768ddd29713",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "3IKbldieRuFBm7Th",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Runs daily at 9 AM. Fetches active research topics from Supabase and processes each one.",
+        "height": 96
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -240
+      ],
+      "id": "82ddada5-d9a9-40f1-bd9b-d5dffb41ff11",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Calls the FastAPI Research Agent backend. Returns a full AI-generated digest for the topic. Auth via X-N8N-API-Key header.",
+        "height": 112
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -240
+      ],
+      "id": "109f0000-b77b-4f56-8a89-85861f8e20a0",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "If digest is empty (API failure), sends an alert email. Otherwise sends the full digest to the researcher.",
+        "height": 96
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        -240
+      ],
+      "id": "3b59c6a0-9a50-417e-b9e0-7bf82f0d7584",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "sendTo": "vijayadurga.adapa@amzur.com",
+        "subject": "Research Digest Failed",
+        "message": "=Research digest could not be generated for topic: {{ $json.topic }}  Please check the backend logs.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1472,
+        64
+      ],
+      "id": "5d06d9b4-ffb4-4ba4-99c3-975f286dc28c",
+      "name": "Send a message1",
+      "webhookId": "df17afb8-3eb7-4920-ac89-78bf79e61098",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qCOubMDGoxNATWJs",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Marks email_sent = true in research_digests table for audit trail.",
+        "height": 80
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        -240
+      ],
+      "id": "79e7117d-72d4-4e75-a0e3-bc6c1cdf8089",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const digest = $input.item.json.digest;\nconst topic = $input.item.json.topic;\n\n// Parse sections\nconst sections = digest.split(/\\n## /).filter(s => s.trim());\n\nlet sectionsHtml = '';\nfor (const section of sections) {\n  const lines = section.trim().split('\\n');\n  const title = lines[0].replace(/^## /, '');\n  const body = lines.slice(1).join('\\n').trim();\n\n  // Convert bullet points\n  const formatted = body\n    .replace(/^\\* \\*\\*(.+?)\\*\\*:? ?(.*)$/gm, '<li><strong>$1</strong> $2</li>')\n    .replace(/^\\* (.+)$/gm, '<li>$1</li>')\n    .replace(/\\*\\*(.+?)\\*\\*/g, '<strong>$1</strong>')\n    .replace(/https?:\\/\\/\\S+/g, url => `<a href=\"${url}\" style=\"color:#3182ce\">${url}</a>`)\n    .replace(/(<li>[\\s\\S]+<\\/li>)/g, '<ul style=\"padding-left:20px;margin:10px 0\">$1</ul>');\n\n  const isRef = title.toLowerCase().includes('reference');\n  const cardColor = isRef ? '#f7fafc' : '#fff';\n  const titleColor = isRef ? '#718096' : '#2c5282';\n\n  sectionsHtml += `\n    <div style=\"background:${cardColor};border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin-bottom:16px\">\n      <h2 style=\"color:${titleColor};margin:0 0 12px 0;font-size:18px;border-bottom:2px solid #e2e8f0;padding-bottom:8px\">${title}</h2>\n      <div style=\"color:#4a5568;font-size:14px;line-height:1.7\">${formatted || body}</div>\n    </div>`;\n}\n\nconst html = `\n<div style=\"font-family:Arial,sans-serif;max-width:820px;margin:auto;padding:24px;background:#f0f4f8\">\n  <div style=\"background:linear-gradient(135deg,#2c5282,#4299e1);border-radius:10px;padding:28px;margin-bottom:24px;color:white\">\n    <div style=\"font-size:12px;opacity:0.8;margin-bottom:4px\">DAILY RESEARCH DIGEST</div>\n    <h1 style=\"margin:0;font-size:26px;text-transform:capitalize\">${topic}</h1>\n    <div style=\"font-size:12px;opacity:0.7;margin-top:8px\">${new Date().toDateString()}</div>\n  </div>\n  ${sectionsHtml}\n  <div style=\"text-align:center;color:#a0aec0;font-size:12px;margin-top:16px\">\n    Generated automatically by the AI Research Automation Workflow\n  </div>\n</div>`;\n\nreturn { json: { digest_id: $input.item.json.digest_id, topic: $input.item.json.topic, digest: $input.item.json.digest, html_body: html } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        -96
+      ],
+      "id": "65e345fe-b24c-4283-bd66-2d08db3303f1",
+      "name": "Code in JavaScript",
+      "executeOnce": false
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c7716ffa-a5a5-46bb-9474-2340f9a8db97",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c7e740c273e840dce7c9f2123892b145f83a99c1154f74a49f6a6374cb885d45"
+  },
+  "id": "kotfNSqebSaNvHQK",
+  "tags": []
+}
